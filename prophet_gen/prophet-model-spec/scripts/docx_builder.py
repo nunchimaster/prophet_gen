@@ -13,6 +13,12 @@ spec.json 스키마 (모든 키 선택, 없으면 생략):
   "cover_note": "표지 하단 주의문구",
   "facts":   [ {"heading":"1.1 상품 개요", "headers":["항목","내용","근거"],
                 "rows":[["...","...","..."]], "footnote":"※ ..."} , ... ],
+  "summary": {                                  # 도출 현황 요약(대시보드, 선택)
+     "headline": "영역 11개 · 변수 96개 · 파라미터 N · 계산결과 M ...",
+     "by_area":  [["영역","변수 수"], ["A 계약·모델포인트","16"], ...],
+     "by_type":  [["타입(대분류)","개수"], ["Parameter(입력·가정)","N"], ...],
+     "burden":   [["항목","수치"], ["샘플 가정(// 샘플)","20개소"], ["근사 표기","9회"]]
+  },
   "areas":   [ {"title":"2. 영역 A — ...", "note":"영역 설명(선택)",
                 "rows":[["변수명","타입","의미(근거)","포뮬라"], ...] }, ... ],
   "assumptions": {
@@ -135,6 +141,23 @@ def build(data, outpath):
     if data.get("cover_note"):
         p = b.doc.add_paragraph(); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         _font(p.add_run(data["cover_note"]), size=8.5, color=GREY, italic=True)
+
+    # 도출 현황 요약 (대시보드)
+    sm = data.get("summary")
+    if sm:
+        b.doc.add_paragraph()
+        b.h1("도출 현황 요약 (Generation Summary)")
+        if sm.get("headline"):
+            b.para(sm["headline"], size=10, bold=True, color=BLUE)
+        if sm.get("by_area"):
+            b.h2("영역별 변수 개수")
+            b.table(sm["by_area"][0], sm["by_area"][1:])
+        if sm.get("by_type"):
+            b.h2("타입별 변수 개수")
+            b.table(sm["by_type"][0], sm["by_type"][1:])
+        if sm.get("burden"):
+            b.h2("검증 부담", color=SAMPLE)
+            b.table(sm["burden"][0], sm["burden"][1:])
 
     # 1. 추출된 상품 사실
     facts = data.get("facts", [])
