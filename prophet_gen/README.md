@@ -22,6 +22,12 @@
 ### B. 웹앱으로 쓰기 (Claude 없는 사람도)
 `prophet-spec-app/README.md` 참고 — Anthropic API 키를 서버에 넣고 배포하면 URL로 누구나 접속.
 
+## 산출물
+
+- **md/화면 전문**: 추출된 상품 사실 → 영역별 변수표 → 컨벤션 → **가정 사항 명세(Assumptions Log)** → 경고. 요약·생략 없이 전부 출력.
+- **docx**: `prophet-model-spec/scripts/docx_builder.py`(데이터 주도형 빌더)로 생성. `spec.json`만 만들면 한글 폰트·표지·샘플 자동 강조가 들어간 docx를 만듭니다. 사용법은 스크립트 상단 docstring 참조. (`pip install python-docx`)
+- **가정 사항 명세**: 가정한 모든 항목을 ⓐ 샘플 가정값 / ⓑ 구조 근사 / ⓒ 문서·데이터 부재 3분류로 추적 기록 — 변수표의 샘플 주석과 1:1 대응.
+
 ## 주의
 
 - 가정값(요율·수익률·사업비)은 전부 **샘플**입니다. 회사 경험자료로 교체 후 검증하세요.
